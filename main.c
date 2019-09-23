@@ -10,6 +10,7 @@
 #include <bits.h>
 #include <GPIO.h>
 #include "RGB.h"
+#include <FSM.h>
 
 int main(void) {
 
