@@ -29,6 +29,18 @@ typedef struct
 /********************************************************************************************/
 /********************************************************************************************/
 /*!
+ 	 \brief	  Inicializa el Handler en Callback
+
+ 	 \param[in]  PIT channel a utilizar
+ 	 \param[in]  Handler es un apuntador a funcion
+ 	 \return 	 void
+ */
+void PIT_callback_init(PIT_timer_t pit_timer, void (*handler)(void));
+
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
  	 \brief	 This function configure the PIT to generate a delay base on the system clock.
  	 It is important to note that this strictly is not device driver since everything is
  	 contained in a single function,  in general you have to avoid this practices, this only

@@ -9,7 +9,6 @@
 #define RGB_H_
 
 #include "stdint.h"
-#include "PIT.h"
 
 #define SET_RED_ON	  0x00400000;
 #define SET_GREEN_ON  0x04000000;
@@ -34,18 +33,16 @@ typedef enum {
 	RGB_OFF,
 } color_OFF;
 
-
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/
 /*!
- 	 \brief	  Inicializa el Handler en Callback
+ 	 \brief:   Es la función que hace de DIRECTOR de ORQUESTA para cambiar de ESTADO (Colores)
 
- 	 \param[in]  PIT channel a utilizar
- 	 \param[in]  Handler es un apuntador a funcion
- 	 \return 	 void
+ 	 \param[in]  Void.
+ 	 \return 	 Void.
  */
-void PIT_callback_init(PIT_timer_t pit_timer, void (*handler)(PIT_timer_t pit_timer, My_float_pit_t system_clock , My_float_pit_t delay));
+void fx (void);
 
 /********************************************************************************************/
 /********************************************************************************************/

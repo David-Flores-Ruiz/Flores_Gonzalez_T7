@@ -12,7 +12,9 @@
 #include "RGB.h"
 #include "NVIC.h"
 #include "PIT.h"
-#include <FSM.h>
+
+#define SYSTEM_CLOCK (21000000U)
+#define DELAY (2)				// Cambio de estados por PIT cada 1 seg
 
 #define ASCENDENTE_SW2  (0x02u) // Orden1 de FSM
 #define DESCENDENTE_SW3 (0x01u)	// Orden2 de FSM
@@ -24,7 +26,6 @@ typedef enum {
 	RED,		// 3
 	YELLOW,		// 4
 }State_name_t;
-
 
 int main(void) {
 
@@ -64,14 +65,15 @@ int main(void) {
 	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_10);	// Setup pin + threshold
 	NVIC_global_enable_interrupts;									// Habilita interrupciones globales
 
-	/** Callbacks for GPIO */
-	PIT_callback_init(PIT_0, PIT_delay);	// Se inicializa handler con función PIT_delay
-											// El call back pertenece a la capa RGB
+	/** Callbacks for PIT */
+	PIT_callback_init(PIT_0, fx);	// Se inicializa handler con función en capa RGB
 
+	/** Run interruption requests del PIT en channel 0 **/
+	PIT_delay(PIT_0, SYSTEM_CLOCK, DELAY);	 // Timer0 , Clk del MCU , specific Delay -> START !
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	while (1) {
-
+		/*
 		arriba_sw2  = GPIO_read_pin( GPIO_C, bit_6);	// lee el sw2
 		abajo_sw3   = GPIO_read_pin( GPIO_A, bit_4);	// lee el sw3
 		arriba_sw2  = arriba_sw2 >> 6;		// mandar el bit al LSB
@@ -176,6 +178,7 @@ int main(void) {
 				break;
 
 		}//end switch (current state)
+*/
 
 //		delay(650);		//Haciendo Pruebas de la FSM
 
