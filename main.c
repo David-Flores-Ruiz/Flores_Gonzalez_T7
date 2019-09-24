@@ -10,10 +10,12 @@
 #include <bits.h>
 #include <GPIO.h>
 #include "RGB.h"
+#include "NVIC.h"
+#include "PIT.h"
 #include <FSM.h>
 
-#define ASCENDENTE_SW2  (0x02u)
-#define DESCENDENTE_SW3 (0x01u)
+#define ASCENDENTE_SW2  (0x02u) // Orden1 de FSM
+#define DESCENDENTE_SW3 (0x01u)	// Orden2 de FSM
 
 typedef enum {
 	GREEN,		// 0
@@ -22,6 +24,7 @@ typedef enum {
 	RED,		// 3
 	YELLOW,		// 4
 }State_name_t;
+
 
 int main(void) {
 
@@ -52,12 +55,29 @@ int main(void) {
 	GPIO_data_direction_pin(GPIO_E, GPIO_OUTPUT, bit_26); // OUTPUT - 1 GREEN
 	GPIO_data_direction_pin(GPIO_B, GPIO_OUTPUT, bit_21); // OUTPUT - 1 BLUE
 
+	/////////////////////////////// Config del PIT Timer en Channel 0 ///////////////////////////////////////
+	PIT_clock_gating();		// Habilita modulo PIT
+	PIT_enable();			// Habilita PIT Timer
+//	FRZ_enable();	// For enter in Debug Mode
+
+//	NVIC_set_basepri_threshold(PRIORITY_10);
+	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_10);	// Setup pin + threshold
+	NVIC_global_enable_interrupts;									// Habilita interrupciones globales
+
+	/** Callbacks for GPIO */
+	PIT_callback_init(PIT_0, PIT_delay);	// Se inicializa handler con función PIT_delay
+											// El call back pertenece a la capa RGB
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	while (1) {
+
 		arriba_sw2  = GPIO_read_pin( GPIO_C, bit_6);	// lee el sw2
 		abajo_sw3   = GPIO_read_pin( GPIO_A, bit_4);	// lee el sw3
 		arriba_sw2  = arriba_sw2 >> 6;		// mandar el bit al LSB
 		abajo_sw3   = abajo_sw3  >> 3;		// mandar el bit al penúltimo
 		total_input = arriba_sw2 | abajo_sw3;
+
 
 		switch (current_state)
 		{
@@ -157,7 +177,7 @@ int main(void) {
 
 		}//end switch (current state)
 
-		delay(650);
+//		delay(650);		//Haciendo Pruebas de la FSM
 
 	} // end while (1)
 } // end main

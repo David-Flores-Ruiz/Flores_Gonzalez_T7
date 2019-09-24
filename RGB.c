@@ -9,6 +9,40 @@
 #include "bits.h"
 #include "RGB.h"
 #include <GPIO.h>
+#include "PIT.h"
+
+static void (*PIT_0_callback)(PIT_timer_t pit_timer, My_float_pit_t system_clock , My_float_pit_t delay);
+static void (*PIT_1_callback)(void) = 0;	// Inicializamos apuntadores a función
+static void (*PIT_2_callback)(void) = 0;
+static void (*PIT_3_callback)(void) = 0;
+
+#define SYSTEM_CLOCK (21000000U)
+#define DELAY (1)				// Cambio de estados por PIT cada 1 seg
+
+
+void PIT_callback_init(PIT_timer_t pit_timer, void (*handler)(PIT_timer_t pit_timer, My_float_pit_t system_clock , My_float_pit_t delay)) {
+	if (PIT_0 == pit_timer) {
+		PIT_0_callback = handler;
+	}
+	if (PIT_1 == pit_timer) {
+		PIT_1_callback = handler;
+	}
+	if (PIT_2 == pit_timer) {
+		PIT_2_callback = handler;
+	}
+	if (PIT_3 == pit_timer) {
+		PIT_3_callback = handler;
+	}
+}
+
+void PIT0_IRQHandler(void)			// ESTE ES MI VECTOR DE INTERRUPCIÓN
+{
+	if (PIT_0_callback) {	// Si ya se inicializó el apuntador a función
+		PIT_0_callback(PIT_0, SYSTEM_CLOCK, DELAY);	// con el Handler del CallBack... LLAMADA A FUNCIÓN: PIT_delay();
+	}
+
+	PIT_clear_interrupt(PIT_0);				// Apago interrupción por HW
+}
 
 uint8_t encender_LED(color_ON color_RGB) {
 	switch (color_RGB) {

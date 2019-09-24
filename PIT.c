@@ -11,11 +11,11 @@
 
 static PIT_interrupt_flags_t g_intrPIT_status_flag = {0};
 
-void PIT0_IRQHandler(void)							// ESTE ES MI VECTOR DE INTERRUPCIÓN
-{
-	g_intrPIT_status_flag.flag_PIT_channel_0 = TRUE;// Enciendo bandera por Software
-	PIT_clear_interrupt(PIT_0);				// Apago interrupción por HW
-}
+//void PIT0_IRQHandler(void)							// ESTE ES MI VECTOR DE INTERRUPCIÓN
+//{
+//	g_intrPIT_status_flag.flag_PIT_channel_0 = TRUE;// Enciendo bandera por Software
+//	PIT_clear_interrupt(PIT_0);				// Apago interrupción por HW
+//}
 
 void PIT_clock_gating(void)
 {
