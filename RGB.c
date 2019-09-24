@@ -21,6 +21,14 @@ uint8_t encender_LED(color_ON color_RGB) {
 	case BLUE_ON:
 		GPIO_clear_pin(GPIO_B, bit_21);	// ON - 0 BLUE
 		break;
+	case PURPLE_ON:
+		GPIO_clear_pin(GPIO_B, bit_21);	// ON - 0 	BLUE +
+		GPIO_clear_pin(GPIO_B, bit_22);	// ON - 0 	RED		= PURPLE
+		break;
+	case YELLOW_ON:
+		GPIO_clear_pin(GPIO_B, bit_22);	// ON - 0 	RED +
+		GPIO_clear_pin(GPIO_E, bit_26);	// ON - 0 	GREEN	= YELLOW
+		break;
 	default: /**If doesn't exist the option*/
 		return (FALSE);
 	}
@@ -30,13 +38,18 @@ uint8_t encender_LED(color_ON color_RGB) {
 uint8_t apagar_LED(color_OFF color_RGB) {
 	switch (color_RGB) {
 	case RED_OFF:
-		GPIO_set_pin( GPIO_B, bit_22);	// OFF - 1 RED;
+		GPIO_set_pin( GPIO_B, bit_22);	// OFF - 1 RED
 		break;
 	case GREEN_OFF:
 		GPIO_set_pin( GPIO_E, bit_26);	// OFF - 1 GREEN
 		break;
 	case BLUE_OFF:
 		GPIO_set_pin( GPIO_B, bit_21);	// OFF - 1 BLUE
+		break;
+	case RGB_OFF:
+		GPIO_set_pin( GPIO_B, bit_22);	// OFF - 1 RED	  +
+		GPIO_set_pin( GPIO_E, bit_26);	// OFF - 1 GREEN  +
+		GPIO_set_pin( GPIO_B, bit_21);	// OFF - 1 BLUE		=	RGB is OFF
 		break;
 	default: /**If doesn't exist the option*/
 		return (FALSE);

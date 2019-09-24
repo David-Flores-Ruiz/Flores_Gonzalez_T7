@@ -22,12 +22,15 @@ typedef enum {
 	RED_ON,
 	GREEN_ON,
 	BLUE_ON,
+	PURPLE_ON,
+	YELLOW_ON,
 } color_ON;
 
 typedef enum {
 	RED_OFF,
 	GREEN_OFF,
 	BLUE_OFF,
+	RGB_OFF,
 } color_OFF;
 
 /********************************************************************************************/
