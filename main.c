@@ -97,7 +97,7 @@ int main(void) {
 				}
 				break;// end case BLUE
 
-				case PURPLE:
+			case PURPLE:
 				apagar_LED(RGB_OFF);
 				encender_LED(PURPLE_ON);			// ENCIENDE LED PURPLE EN k-64
 
@@ -115,7 +115,7 @@ int main(void) {
 				}
 				break;// end case PURPLE
 
-				case RED:
+			case RED:
 				apagar_LED(RGB_OFF);
 				encender_LED(RED_ON);			// ENCIENDE LED RED EN k-64
 
@@ -133,7 +133,7 @@ int main(void) {
 				}
 				break;// end case RED
 
-				case YELLOW:
+			case YELLOW:
 				apagar_LED(RGB_OFF);
 				encender_LED(YELLOW_ON);			// ENCIENDE LED YELLOW EN k-64
 
@@ -150,9 +150,14 @@ int main(void) {
 					break;
 				}
 				break;// end case YELLOW
+			default:
+				apagar_LED(RGB_OFF);		// DEFAULT...
+				current_state = GREEN;		// NOS REGRESA AL ESTADO INICIAL
+				break;
 
 		}//end switch (current state)
 
+		delay(650);
 
 	} // end while (1)
 } // end main
