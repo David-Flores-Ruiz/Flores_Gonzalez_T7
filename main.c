@@ -12,13 +12,15 @@
 #include "RGB.h"
 
 int main(void) {
+	uint8_t(*fptrPort)( gpio_port_name_t dato)=GPIO_clock_gating;//apuntador a funcion
 
 	uint32_t arriba_sw2 = 0;	// Secuencia: Verde-Amarillo-Rojo-Morado-Azul...Verde
 	uint32_t abajo_sw3  = 0;	// Secuencia: Verde-Azul-Morado-Rojo-Amarillo...Verde
 	uint32_t contador   = 0;	// Ascendente
 	uint32_t contador_2 = 0;	// Descendente
 
-	GPIO_clock_gating( GPIO_A);	// sw3
+	fptrPort(GPIO_A);
+	//GPIO_clock_gating( GPIO_A);	// sw3
 	GPIO_clock_gating( GPIO_B);	// led azul y rojo
 	GPIO_clock_gating( GPIO_C);	// sw2
 	GPIO_clock_gating( GPIO_E);	// led verde
@@ -39,6 +41,8 @@ int main(void) {
 	GPIO_data_direction_pin(GPIO_B, GPIO_OUTPUT, bit_22); // OUTPUT - 1 RED
 	GPIO_data_direction_pin(GPIO_E, GPIO_OUTPUT, bit_26); // OUTPUT - 1 GREEN
 	GPIO_data_direction_pin(GPIO_B, GPIO_OUTPUT, bit_21); // OUTPUT - 1 BLUE
+
+
 
 	while (1) {
 
