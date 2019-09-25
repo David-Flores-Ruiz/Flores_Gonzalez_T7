@@ -18,11 +18,13 @@
 #define SET_GREEN_OFF 0x04000000;
 #define SET_BLUE_OFF  0x00200000;
 
+
+
 typedef enum {
-	RED_ON,
 	GREEN_ON,
 	BLUE_ON,
 	PURPLE_ON,
+	RED_ON,
 	YELLOW_ON,
 } color_ON;
 
