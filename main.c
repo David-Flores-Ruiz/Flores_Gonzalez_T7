@@ -1,6 +1,6 @@
 /*
  * @file:			T01_RGB_SwInputs.c
- * @comany:			ITESO
+ * @company:			ITESO
  * @Engineer Team:	D.F.R. / R.G.P.
  */
 
@@ -10,17 +10,15 @@
 #include <bits.h>
 #include <GPIO.h>
 #include "RGB.h"
+#include "NVIC.h"
+#include "PIT.h"
+
+#define SYSTEM_CLOCK (21000000U)
+#define DELAY (0.5)				// Cambio de estados por PIT cada 1 seg
 
 int main(void) {
-	uint8_t(*fptrPort)( gpio_port_name_t dato)=GPIO_clock_gating;//apuntador a funcion
 
-	uint32_t arriba_sw2 = 0;	// Secuencia: Verde-Amarillo-Rojo-Morado-Azul...Verde
-	uint32_t abajo_sw3  = 0;	// Secuencia: Verde-Azul-Morado-Rojo-Amarillo...Verde
-	uint32_t contador   = 0;	// Ascendente
-	uint32_t contador_2 = 0;	// Descendente
-
-	fptrPort(GPIO_A);
-	//GPIO_clock_gating( GPIO_A);	// sw3
+	GPIO_clock_gating( GPIO_A);	// sw3
 	GPIO_clock_gating( GPIO_B);	// led azul y rojo
 	GPIO_clock_gating( GPIO_C);	// sw2
 	GPIO_clock_gating( GPIO_E);	// led verde
@@ -42,9 +40,24 @@ int main(void) {
 	GPIO_data_direction_pin(GPIO_E, GPIO_OUTPUT, bit_26); // OUTPUT - 1 GREEN
 	GPIO_data_direction_pin(GPIO_B, GPIO_OUTPUT, bit_21); // OUTPUT - 1 BLUE
 
+	/////////////////////////////// Config del PIT Timer en Channel 0 ///////////////////////////////////////
+	PIT_clock_gating();		// Habilita modulo PIT
+	PIT_enable();			// Habilita PIT Timer
+//	FRZ_enable();	// For enter in Debug Mode
 
+//	NVIC_set_basepri_threshold(PRIORITY_10);
+	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_10);	// Setup pin + threshold
+	NVIC_global_enable_interrupts;									// Habilita interrupciones globales
+
+	/** Callbacks for PIT */
+	PIT_callback_init(PIT_0, fx);	// Se inicializa handler con función en capa RGB
+
+	/** Run interruption requests del PIT en channel 0 **/
+	PIT_delay(PIT_0, SYSTEM_CLOCK, DELAY);	 // Timer0 , Clk del MCU , specific Delay -> START !
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	while (1) {
+
 
 
 

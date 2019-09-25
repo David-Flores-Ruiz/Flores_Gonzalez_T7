@@ -9,13 +9,44 @@
 #include "PIT.h"
 #include "Bits.h"
 
+static void (*PIT_0_callback)(void) = 0;	// Inicializamos apuntadores a función
+static void (*PIT_1_callback)(void) = 0;
+static void (*PIT_2_callback)(void) = 0;
+static void (*PIT_3_callback)(void) = 0;
+
 static PIT_interrupt_flags_t g_intrPIT_status_flag = {0};
 
-void PIT0_IRQHandler(void)							// ESTE ES MI VECTOR DE INTERRUPCIÓN
+void PIT_callback_init(PIT_timer_t pit_timer, void (*handler)(void)) {
+	if (PIT_0 == pit_timer) {
+		PIT_0_callback = handler;
+	}
+	if (PIT_1 == pit_timer) {
+		PIT_1_callback = handler;
+	}
+	if (PIT_2 == pit_timer) {
+		PIT_2_callback = handler;
+	}
+	if (PIT_3 == pit_timer) {
+		PIT_3_callback = handler;
+	}
+}
+
+void PIT0_IRQHandler(void)			// ESTE ES MI VECTOR DE INTERRUPCIÓN
 {
-	g_intrPIT_status_flag.flag_PIT_channel_0 = TRUE;// Enciendo bandera por Software
+	if (PIT_0_callback) {	// Si ya se inicializó el apuntador a función
+		PIT_0_callback( );	// con el Handler del CallBack... LLAMADA A FUNCIÓN: PIT_delay();
+	}
+
 	PIT_clear_interrupt(PIT_0);				// Apago interrupción por HW
 }
+
+
+//void PIT0_IRQHandler(void)							// ESTE ES MI VECTOR DE INTERRUPCIÓN
+//{
+//	g_intrPIT_status_flag.flag_PIT_channel_0 = TRUE;// Enciendo bandera por Software
+//	PIT_clear_interrupt(PIT_0);				// Apago interrupción por HW
+//}
+
 
 void PIT_clock_gating(void)
 {
